@@ -7,7 +7,6 @@ FROM registry.access.redhat.com/ubi8/openjdk-8:latest
 COPY ./target/helloworld-mdb-bootable.jar  /app/helloworld-mdb-bootable.jar
 WORKDIR /app
 
-
 EXPOSE 8080/tcp 9990/tcp
 ENV TZ=Asia/Taipei
 ENV JAVA_OPTS=""

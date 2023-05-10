@@ -7,7 +7,7 @@ WORKDIR /app
 COPY ./target/todo-backend-bootable.jar /app/todo-backend-bootable.jar
 
 # 8080 for services 、9990 for web console  
-EXPOSE 8080/tcp 9990/tcp 
+EXPOSE 8080/tcp 9990/tcp
 
 ENV TZ=Asia/Taipei
 ENV JAVA_OPTS=""

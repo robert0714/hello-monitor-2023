@@ -14,5 +14,4 @@ ENV JAVA_OPTS=""
 
 # from wilfly to-do backend app, https://github.com/wildfly/quickstart/tree/main/microprofile-metrics
 
-
 ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS     -jar  /app/microprofile-metrics-bootable.jar"]
