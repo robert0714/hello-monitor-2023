@@ -1,0 +1,12 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  # namespace: helloworld-mdb
+  name: sm-helloworld-mdb
+spec:
+  selector:
+    matchLabels:
+      app:  helloworld-mdb
+  endpoints:
+  - path: /metrics
+    port: probe

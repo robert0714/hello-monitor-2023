@@ -1,0 +1,17 @@
+# https://github.com/grafana/helm-charts/blob/loki-stack-2.9.10/charts/loki-stack/values.yaml
+# Enable Loki with persistence volume
+loki:
+  enabled: true
+  size: 1Gi
+promtail:
+  enabled: true
+grafana:
+  enabled: false
+  sidecar:
+    datasources:
+      enabled: true
+  image:
+    tag: 8.3.4
+fluent-bit:
+  enabled: true
+ 

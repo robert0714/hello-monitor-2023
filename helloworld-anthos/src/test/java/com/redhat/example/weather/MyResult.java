@@ -1,0 +1,19 @@
+package com.redhat.example.weather;
+
+public class MyResult {
+	private boolean ok;
+	private String response;
+	
+	public boolean isOk() {
+		return ok;
+	}
+	public void setOk(boolean ok) {
+		this.ok = ok;
+	}
+	public String getResponse() {
+		return response;
+	}
+	public void setResponse(String response) {
+		this.response = response;
+	}
+}

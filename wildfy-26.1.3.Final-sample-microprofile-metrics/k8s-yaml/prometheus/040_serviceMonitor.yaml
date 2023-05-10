@@ -1,0 +1,12 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  namespace: wildfly-ex-app
+  name: sm-wildfly-microprofile-metrics
+spec:
+  selector:
+    matchLabels:
+      tier: frontend
+  endpoints:
+  - path: /metrics/
+    port: tcp-9990

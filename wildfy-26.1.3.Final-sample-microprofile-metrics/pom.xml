@@ -1,0 +1,222 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+        <groupId>org.wildfly.quickstarts</groupId>
+        <artifactId>wildfly-quickstart-parent</artifactId>
+        <!--
+        Maintain separation between the artifact id and the version to help prevent
+        merge conflicts between commits changing the GA and those changing the V.
+        -->
+        <version>2</version>
+        <relativePath/>
+    </parent>
+
+  <artifactId>microprofile-metrics</artifactId>
+  <version>26.1.3.Final</version>
+  <packaging>war</packaging>
+
+  <name>Quickstart: microprofile-metrics</name>
+
+  <properties>
+    <failOnMissingWebXml>false</failOnMissingWebXml>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <!-- The versions for BOMs, Dependencies and Plugins -->
+    <version.microprofile.bom>26.1.3.Final</version.microprofile.bom>
+    <version.server.bom>26.1.3.Final</version.server.bom>
+    <version.server.bootable-jar>26.1.3.Final</version.server.bootable-jar>
+    <version.wildfly-jar.maven.plugin>7.0.2.Final</version.wildfly-jar.maven.plugin> 
+  </properties>
+
+  <repositories>
+        <repository>
+            <id>jboss-public-maven-repository</id>
+            <name>JBoss Public Maven Repository</name>
+            <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+            <layout>default</layout>
+        </repository>
+        <repository>
+            <id>redhat-ga-maven-repository</id>
+            <name>Red Hat GA Maven Repository</name>
+            <url>https://maven.repository.redhat.com/ga/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+            <layout>default</layout>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>jboss-public-maven-repository</id>
+            <name>JBoss Public Maven Repository</name>
+            <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>redhat-ga-maven-repository</id>
+            <name>Red Hat GA Maven Repository</name>
+            <url>https://maven.repository.redhat.com/ga/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+  <dependencyManagement>
+    <dependencies>
+      <!-- importing the microprofile BOM adds MicroProfile specs -->
+      <dependency>
+        <groupId>org.wildfly.bom</groupId>
+        <artifactId>wildfly-microprofile</artifactId>
+        <version>${version.microprofile.bom}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <!-- importing the jakartaee8-with-tools BOM adds specs and other useful artifacts as managed dependencies -->
+      <dependency>
+        <groupId>org.wildfly.bom</groupId>
+        <artifactId>wildfly-jakartaee8-with-tools</artifactId>
+        <version>${version.server.bom}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <!-- Import the MicroProfile Metrics API, we use provided scope as the API is included in the server -->
+    <dependency>
+      <groupId>org.eclipse.microprofile.metrics</groupId>
+      <artifactId>microprofile-metrics-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <!-- Import the CDI API, we use provided scope as the API is included in the server -->
+    <dependency>
+      <groupId>jakarta.enterprise</groupId>
+      <artifactId>jakarta.enterprise.cdi-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <!-- Import the Jakarta REST API, we use provided scope as the API is included in the server -->
+    <dependency>
+      <groupId>org.jboss.spec.javax.ws.rs</groupId>
+      <artifactId>jboss-jaxrs-api_2.1_spec</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- Needed for running tests (you may also use TestNG) -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!-- Arquillian allows you to test enterprise code such as EJBs and
+           Transactional(JTA) JPA from JUnit/TestNG -->
+    <dependency>
+      <groupId>org.jboss.arquillian.junit</groupId>
+      <artifactId>arquillian-junit-container</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.wildfly.arquillian</groupId>
+      <artifactId>wildfly-arquillian-common</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.resteasy</groupId>
+      <artifactId>resteasy-client</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.logging</groupId>
+      <artifactId>commons-logging-jboss-logging</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <!-- Set the name of the archive -->
+    <finalName>${project.artifactId}</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.asciidoctor</groupId>
+        <artifactId>asciidoctor-maven-plugin</artifactId>
+        <configuration>
+          <!-- adds versions properties as attributes for substitutions in README.adoc source blocks -->
+          <attributes>
+            <versionMicroprofileBom>${version.microprofile.bom}</versionMicroprofileBom>
+          </attributes>
+        </configuration>
+      </plugin>
+      <plugin>
+          <groupId>org.wildfly.plugins</groupId>
+          <artifactId>wildfly-jar-maven-plugin</artifactId>
+          <version>${version.wildfly-jar.maven.plugin}</version>
+          <dependencies>
+            <dependency>
+              <groupId>org.yaml</groupId>
+              <artifactId>snakeyaml</artifactId>
+              <version>2.0</version>
+            </dependency>
+          </dependencies>
+          <configuration>
+              <feature-pack-location>wildfly@maven(org.jboss.universe:community-universe)#${version.server.bootable-jar}</feature-pack-location>
+              <layers>
+                <layer>jaxrs-server</layer>
+                <layer>microprofile-platform</layer>
+                <layer>web-console</layer>
+              </layers>
+              <cloud>
+                <type>kubernetes</type>
+              </cloud>
+              <cli-sessions>
+                <cli-session>
+                  <!-- do not resolve expression as the CORS_ORIGIN env var -->
+                  <!-- can be set at runtime -->
+                  <resolve-expressions>false</resolve-expressions>
+                  <script-files>
+                    <script>${project.build.scriptSourceDirectory}/cors_filters.cli</script>
+                  </script-files>
+                </cli-session>
+              </cli-sessions>
+              <extra-server-content-dirs>
+                  <extra-content>extra-content</extra-content>
+              </extra-server-content-dirs>
+              <plugin-options>
+                <jboss-fork-embedded>true</jboss-fork-embedded>
+              </plugin-options>
+          </configuration>
+          <executions>
+              <execution>
+                <goals>
+                  <goal>package</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+    </plugins>
+  </build>
+ 
+
+</project>

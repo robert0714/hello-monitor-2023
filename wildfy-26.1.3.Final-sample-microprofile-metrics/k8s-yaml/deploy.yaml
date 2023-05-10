@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wildfly-microprofile-metrics-deployment
+  namespace: wildfly-ex-app 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: wildfly-microprofile-metrics
+      application: wildfly-microprofile-metrics
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: wildfly-microprofile-metrics
+        application: wildfly-microprofile-metrics
+      annotations:
+        prometheus.io/port: '8080'
+        prometheus.io/scheme: http
+        prometheus.io/scrape: 'true'  
+    spec:
+      containers:
+      - name: wildfly-microprofile-metrics
+        image: wildfly-microprofile-metrics:latest
+        imagePullPolicy: IfNotPresent
+        env: 
+        - name: JAVA_OPTS
+          value:   >-
+                  -Dwildfly.statistics-enabled=true
+        - name: TZ
+          value: 'Asia/Taipei'          
+        ports:
+        - name: web
+          containerPort: 8080
+          protocol: TCP
+        - name: metrics
+          containerPort: 9990
+          protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wildfly-microprofile-metrics-service
+  namespace: wildfly-ex-app
+  labels:
+    tier: frontend
+spec:
+  selector:
+    app.kubernetes.io/name: wildfly-microprofile-metrics
+  ports:
+    - name: tcp-8080
+      protocol: TCP
+      port: 8080
+      targetPort: web
+    - name: tcp-9990
+      protocol: TCP
+      port: 9990
+      targetPort: metrics

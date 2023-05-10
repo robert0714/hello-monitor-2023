@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: ex-aao-sm
+  labels:
+    team: frontend
+spec:
+  selector:
+    matchLabels:
+      application: ex-aao-app
+  endpoints:
+  - path: /metrics/
+    port: wconsj-0
+---

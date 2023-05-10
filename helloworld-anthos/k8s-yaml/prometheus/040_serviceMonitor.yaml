@@ -1,0 +1,12 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  namespace: helloworld-anthos
+  name: sm-helloworld-anthos
+spec:
+  selector:
+    matchLabels:
+      app: helloworld-anthos
+  endpoints:
+  - path: /metrics/
+    port: probe

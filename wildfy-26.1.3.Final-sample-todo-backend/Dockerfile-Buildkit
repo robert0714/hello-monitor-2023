@@ -1,0 +1,43 @@
+# see https://www.baeldung.com/ops/docker-cache-maven-dependencies#caching-using-buildkit
+# DOCKER_BUILDKIT=1 docker build -t wildfly-todo-backend:latest .
+
+# BUILD STAGE
+# FROM maven:3.8.7-eclipse-temurin-8-alpine  AS builder
+# FROM maven:3.6.3-openjdk-8-slim  AS builder
+FROM mailbyms/mvnd:0.9.0-jdk-8  AS builder
+ENV HOME=/app0
+RUN mkdir -p $HOME
+WORKDIR  $HOME
+ADD . $HOME
+# go-offline using the pom.xml
+# RUN --mount=type=cache,target=/root/.m2 mvn dependency:go-offline
+# RUN --mount=type=cache,target=/root/.m2/repository mvn dependency:resolve
+
+# https://blog.frankel.ch/faster-maven-builds/2/
+RUN --mount=type=cache,target=/root/.m2,rw   mvn -f $HOME/pom.xml clean package
+# RUN --mount=type=cache,target=/tmp mvn -f $HOME/pom.xml clean package
+
+
+# FINAL STAGE
+# from redhat website: https://catalog.redhat.com/software/containers/ubi8/openjdk-11/5dd6a4b45a13461646f677f4?container-tabs=gti&gti-tabs=unauthenticated
+# FROM registry.access.redhat.com/ubi8/openjdk-11
+FROM registry.access.redhat.com/ubi8/openjdk-8:latest
+WORKDIR /app
+
+COPY --from=builder /app0/target/todo-backend-bootable.jar . 
+
+# 8080 for services 、9990 for web console  
+EXPOSE 8080/tcp 9990/tcp 
+
+ENV TZ=Asia/Taipei
+ENV JAVA_OPTS=""
+
+# from wilfly to-do backend app, https://github.com/wildfly/quickstart/tree/main/todo-backend
+ENV POSTGRESQL_DATABASE=todos 
+ENV POSTGRESQL_SERVICE_HOST=localhost
+ENV POSTGRESQL_SERVICE_PORT=5432
+ENV POSTGRESQL_USER=todos
+ENV POSTGRESQL_PASSWORD=mysecretpassword
+ENV POSTGRESQL_DATASOURCE=ToDos
+
+ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS     -jar  /app/todo-backend-bootable.jar"]

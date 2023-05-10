@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: ex-aao-lb
+  namespace: activemq-artemis-operator
+spec:
+  ports:
+    - name: all-acceptors
+      protocol: TCP
+      port: 61616
+  type: ClusterIP
+  selector:
+    application: ex-aao-app

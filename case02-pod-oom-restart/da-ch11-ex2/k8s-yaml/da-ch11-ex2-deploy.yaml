@@ -1,0 +1,32 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name:  da-ch11-ex2
+  labels:
+    app:  da-ch11-ex2 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app:  da-ch11-ex2
+  template:
+    metadata:
+      labels:
+        app:  da-ch11-ex2 
+    spec:
+      containers:
+      - name:  da-ch11-ex2
+        image: da-ch11-ex2:latest  
+        imagePullPolicy: IfNotPresent
+        env:         
+        - name: JAVA_OPTS
+          value: >-
+                -XX:+HeapDumpOnOutOfMemoryError 
+                -XX:HeapDumpPath=heapdump.bin 
+        resources:
+          requests: 
+            memory: 30Mi
+            cpu: 50m
+          limits: 
+            memory: 100Mi
+            cpu: 200m                
