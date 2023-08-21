@@ -21,7 +21,8 @@ spec:
     spec:
       containers:
       - name: wildfly-microprofile-metrics
-        image: wildfly-microprofile-metrics:latest
+        image: ghcr.io/robert0714/wildfly-microprofile-metrics:2023-05-10
+        # image: wildfly-microprofile-metrics:latest
         imagePullPolicy: IfNotPresent
         env: 
         - name: JAVA_OPTS

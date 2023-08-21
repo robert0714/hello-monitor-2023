@@ -21,7 +21,8 @@ spec:
     spec:
       containers:
       - name: wildfly-ex-app
-        image: wildfly-todo-backend:latest
+        image: ghcr.io/robert0714/wildfly-todo-backend:2023-05-10
+        # image: wildfly-todo-backend:latest
         imagePullPolicy: IfNotPresent
         env: 
         - name: POSTGRESQL_SERVICE_HOST
